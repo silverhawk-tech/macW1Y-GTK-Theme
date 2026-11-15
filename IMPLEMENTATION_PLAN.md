@@ -2,7 +2,7 @@
 
 **Stage:** Plan only. No deployment approved.  
 **Primary target:** Existing Ubuntu 26.04.1 LTS / GNOME Wayland workstation.  
-**Managers:** Codex or Claude (one active owner). **Implementer:** Gemini.  
+**Manager:** Claude. **Reviewer:** Codex. **Implementer:** Gemini.  
 **CI:** Independent local ci-farm only; never GitHub Actions.
 
 ## Delivery philosophy

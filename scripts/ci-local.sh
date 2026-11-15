@@ -39,14 +39,21 @@ for script in install.sh uninstall.sh apply_plymouth.sh; do
   fi
 done
 
-if command -v python3 >/dev/null 2>&1; then
+if ! command -v python3 >/dev/null 2>&1; then
+  fail "python3 unavailable; extension-metadata and config-JSON validation did not run"
+else
   if python3 - <<'PY'
 import json
 from pathlib import Path
 
+non_extension_dirs = {"ding-patches"}
+ext_dirs = sorted(p for p in Path("extensions").iterdir() if p.is_dir() and p.name not in non_extension_dirs)
 files = sorted(Path("extensions").glob("*/metadata.json"))
 if not files:
     raise SystemExit("ERROR: no GNOME extension metadata found")
+missing = [d.name for d in ext_dirs if not (d / "metadata.json").is_file()]
+if missing:
+    raise SystemExit(f"ERROR: extension directories missing metadata.json: {missing}")
 for file in files:
     with file.open(encoding="utf-8") as stream:
         data = json.load(stream)
@@ -81,8 +88,6 @@ PY
   else
     fail "GNOME extension metadata validation failed"
   fi
-else
-  say "SKIP: python3 unavailable (no metadata validation)"
 fi
 
 if (( failed )); then

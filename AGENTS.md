@@ -10,8 +10,8 @@ This file governs all automated work on this fork. The upstream AI_INSTRUCTIONS.
 
 ## Agent roles and handoff
 
-- **Super Manager: Claude.** Owns scope, architecture, the risk register (R01-R15), task delegation, integration, and final acceptance. Breaks work into small, testable changes and reviews every diff before it is folded in.
-- **Specialist engineer/reviewer: Codex.** Independent security analysis, complex engineering problems, architecture validation, and code review — in particular a second opinion on anything touching R01-R15.
+- **Super Manager: Claude.** Owns scope, architecture, the risk register in COMPATIBILITY.md, task delegation, integration, and final acceptance. Breaks work into small, testable changes and reviews every diff before it is folded in.
+- **Specialist engineer/reviewer: Codex.** Independent security analysis, complex engineering problems, architecture validation, and code review — in particular a second opinion on anything in COMPATIBILITY.md.
 - **Primary implementation worker: Gemini.** Writes code, tests, and adaptation patches under the manager's scoped task instructions; does not autonomously deploy to the workstation.
 - **Human approval:** required before privileged changes, system paths, login/session/boot modifications, installation, restart/log-out, or any operation capable of disconnecting remote access.
 - Favor the smallest change with no new frameworks, dependency bloat, or agent hierarchy. Keep plans, code comments, and handoff summaries in English.

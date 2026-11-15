@@ -14,12 +14,12 @@ Captured directly on the target (`dev-bosgame`) with the read-only commands belo
 | GNOME Shell | 50.1, session type `wayland`, `ubuntu:GNOME` |
 | GTK/icon theme | `Yaru-dark` (stock; macOS theme not currently applied) |
 | Enabled extensions | `just-perfection-desktop@just-perfection`, `codexbar@inled.es`, `blur-my-shell@aunetx`, `kiwi@kemma`, `snapd-prompting@canonical.com`, `snapd-search-provider@canonical.com`, `tiling-assistant@ubuntu.com`, `ubuntu-appindicators@ubuntu.com`, `ubuntu-dock@ubuntu.com`, `web-search-provider@ubuntu.com` |
-| AnyDesk | **Not installed** (corrects the earlier assumption — only Tailscale/SSH/GNOME Remote Desktop are present) |
+| AnyDesk | **Not found on PATH via `command -v`** (corrects the earlier assumption — only Tailscale/SSH/GNOME Remote Desktop are confirmed present). `command -v` only shows it isn't on PATH, not that it's fully absent from the system; treat as "not confirmed present" rather than a proven negative. |
 | Tailscale | Installed (`/usr/bin/tailscale`) |
 | SSH | Installed (`/usr/bin/ssh`) |
 | GNOME Remote Desktop | Active, RDP server running (Thincast-compatible) |
 
-**Extension-name collision, new finding:** `blur-my-shell@aunetx` and `kiwi@kemma` are already enabled, but `diff` against this repo's `extensions/blur-my-shell@aunetx` and `extensions/kiwi@kemma` shows the installed copies are the stock, unmodified upstream versions (`SweetTooth`-generated), not this fork's "mac_"-prefixed patched variants. No fork code is currently live. Any future install of this fork's versions of these two extensions would **replace an already-enabled, independently-used extension**, not install cleanly alongside it — treat this as a Work Package 2 collision to plan for explicitly (back up the user's current config/version of each before swapping).
+**Extension-name collision, new finding:** `blur-my-shell@aunetx` and `kiwi@kemma` are already enabled. This was checked with an additional `diff -rq` against this repo's `extensions/blur-my-shell@aunetx` and `extensions/kiwi@kemma` (beyond the commands listed above) and shows the installed copies are the stock, unmodified upstream versions (`SweetTooth`-generated), not this fork's "mac_"-prefixed patched variants. No fork code is currently live. Any future install of this fork's versions of these two extensions would **replace an already-enabled, independently-used extension**, not install cleanly alongside it — treat this as a Work Package 2 collision to plan for explicitly (back up the user's current config/version of each before swapping).
 
 Ubuntu 26.04 / GNOME Shell 50 is the confirmed adaptation target. Bundled GNOME extension metadata frequently lists version 50; that alone does not verify extension safety, actual ABI/API compatibility, or compatibility with the workstation's package versions.
 
@@ -78,7 +78,7 @@ Additional backups and network/remote checks require a deliberately reviewed com
 
 1. All planned changes are user-scoped, listed in a manifest, and can be reversed without relying on the upstream uninstaller.
 2. GUI boots normally; existing session, keyboard, and desktop settings remain intact.
-3. AnyDesk, GNOME Remote Desktop/RDP, Tailscale, SSH, terminal keyboard/clipboard, and local login remain functional before and after each tested component.
+3. GNOME Remote Desktop/RDP, Tailscale, SSH, terminal keyboard/clipboard, and local login remain functional before and after each tested component. AnyDesk is not confirmed present on this workstation (see snapshot above); if it is installed by other means, verify it too — do not assume it must be present to pass this gate.
 4. Local ci-farm checks pass; no GitHub-hosted CI is configured or run.
 5. Real GNOME/Wayland testing completed for each enabled extension; no forced version-validation bypass.
 6. A proven recovery procedure is available independent of the session being modified.
