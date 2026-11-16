@@ -13,10 +13,10 @@ Preserve a working development machine and its remote connectivity. Aim for the 
 
 - [x] Establish safe agent rules and local-only CI requirement.
 - [x] Identify critical static risks in upstream installer, uninstaller, and representative runtime components.
-- [ ] Run scripts/ci-local.sh on a local clone or independent ci-farm; record output (no GitHub Actions).
-- [ ] Verify current exact GNOME Shell, Mutter, Ubuntu, Wayland, existing extensions, theme settings, and remote access with read-only commands listed in COMPATIBILITY.md.
-- [ ] Establish a restore point, access method independent of the modified graphical session, and a proven rollback process before any GUI mutation.
-- [ ] Manually inspect upstream assets that will be reused for licenses, unexpected executables/symlinks, and malware indicators.
+- [x] Run scripts/ci-local.sh on a local clone or independent ci-farm; record output (no GitHub Actions). Ran `bash scripts/ci-local.sh` on commit 19d2410a: exit 0, all 10 checks printed PASS, no FAIL; re-verified by Codex QA (gpt-6-luna, 2026-11-16) including simulated-failure cases. Reproduce with `bash scripts/ci-local.sh`.
+- [x] Verify current exact GNOME Shell, Mutter, Ubuntu, Wayland, existing extensions, theme settings, and remote access with read-only commands listed in COMPATIBILITY.md. Captured in COMPATIBILITY.md's "confirmed read-only snapshot" table.
+- [ ] Establish a restore point, access method independent of the modified graphical session, and a proven rollback process before any GUI mutation. Access confirmed (SSH/Tailscale services active, independent of the GNOME session) and a dconf/file-backup rollback procedure is designed — see COMPATIBILITY.md "Restore point and recovery" — but a live backup/restore round-trip has not been rehearsed yet; leaving open until Work Package 1's dry-run exercises it for real.
+- [x] Manually inspect upstream assets that will be reused for licenses, unexpected executables/symlinks, and malware indicators. See COMPATIBILITY.md "Asset spot-check": icon theme (`icons/MacTahoe*`) is attributed/licensed GPLv3; GTK `.rc`/`themerc` files and symlinks carry no risk; `fonts/` (except `Open_Runde`) and the two Apple-pattern-matching wallpaper assets are excluded pending real license verification, not cleared for reuse.
 
 **Gate 0:** Manager approves a specific, auditable cosmetic-only scope. No runtime changes.
 
