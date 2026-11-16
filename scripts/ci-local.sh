@@ -17,14 +17,24 @@ for required in AGENTS.md COMPATIBILITY.md IMPLEMENTATION_PLAN.md; do
   [[ -s "$required" ]] || fail "Missing required policy document: $required"
 done
 
-if [[ -d .github/workflows ]] && [[ -n "$(find .github/workflows -type f -print -quit)" ]]; then
-  fail "GitHub Actions workflow files exist. Remove them: GitHub CI is prohibited."
+if [[ -d .github/workflows ]]; then
+  if ! workflows_found="$(find .github/workflows -type f -print -quit)"; then
+    fail "Could not run the .github/workflows file-existence check."
+  elif [[ -n "$workflows_found" ]]; then
+    fail "GitHub Actions workflow files exist. Remove them: GitHub CI is prohibited."
+  else
+    say "PASS: No GitHub Actions workflows in .github/workflows"
+  fi
 else
   say "PASS: No GitHub Actions workflows in .github/workflows"
 fi
 
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1 && [[ -n "$(git ls-files -- .github/workflows)" ]]; then
-  fail "Tracked GitHub Actions workflows found in git history."
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  fail "Could not run the git-tracked-workflows check."
+elif ! tracked_workflows="$(git ls-files -- .github/workflows)"; then
+  fail "Could not run the git-tracked-workflows check."
+elif [[ -n "$tracked_workflows" ]]; then
+  fail "Tracked GitHub Actions workflow files found in the repository."
 else
   say "PASS: No tracked GitHub Actions workflows"
 fi

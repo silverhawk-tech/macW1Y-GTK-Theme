@@ -54,7 +54,7 @@ This file governs all automated work on this fork. The upstream AI_INSTRUCTIONS.
 2. Gemini implements the smallest change in a separate branch; no live deployment or privilege escalation.
 3. Manager reviews the security and compatibility impact, then tests using independent local ci-farm/static checks.
 4. For a proposed user-scoped deployment, produce: exact file manifest, planned commands, before-state capture, reversible backup, dry-run, disable/uninstall procedure, and remote recovery path.
-5. Get explicit approval before the first live install or any privileged operation. Change only one component at a time; verify AnyDesk, RDP, Tailscale, login, desktop, and rollback after each component.
+5. Get explicit approval before the first live install or any privileged operation. Change only one component at a time; verify AnyDesk (if present), RDP, Tailscale, login, desktop, and rollback after each component.
 6. Never automatically merge or deploy from a PR. Report unverified assumptions and stop on unexpected changes.
 
 ## Stop conditions

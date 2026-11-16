@@ -75,7 +75,7 @@ This check intentionally proves only the documented static policy assertions and
 2. Store backups and a rollback manifest outside the theme source tree.
 3. Confirm alternate SSH/physical recovery route, and verify it works.
 4. Apply one user-scoped component (not full installer).
-5. Confirm desktop, login, AnyDesk, GNOME RDP, Tailscale, SSH, terminal autocomplete, clipboard text, and screenshot clipboard behavior are no worse than baseline.
+5. Confirm desktop, login, AnyDesk (if present), GNOME RDP, Tailscale, SSH, terminal autocomplete, clipboard text, and screenshot clipboard behavior are no worse than baseline.
 6. If any function breaks, execute the specific component rollback and stop; do not use upstream uninstall.sh.
 7. After a successful validation window, document the exact tested versions and any unresolved limitations.
 

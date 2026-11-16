@@ -6,7 +6,7 @@
 
 ## Target environment — confirmed read-only snapshot, 2026-11-15
 
-Captured directly on the target (`dev-bosgame`) with the read-only commands below; no writes made.
+Captured directly on the target workstation with the read-only commands below; no writes made.
 
 | Item | Value |
 | --- | --- |
@@ -61,6 +61,7 @@ Ubuntu 26.04 / GNOME Shell 50 is the confirmed adaptation target. Bundled GNOME 
 
     cat /etc/os-release
     gnome-shell --version
+    mutter --version
     echo "$XDG_SESSION_TYPE"
     echo "$XDG_CURRENT_DESKTOP"
     gnome-extensions list --enabled
