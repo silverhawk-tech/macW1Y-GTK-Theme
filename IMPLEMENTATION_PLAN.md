@@ -20,17 +20,22 @@ Preserve a working development machine and its remote connectivity. Aim for the 
 
 **Gate 0:** Manager approves a specific, auditable cosmetic-only scope. No runtime changes.
 
-### Work package 1 — Safe cosmetic asset adapter (Gemini)
+### Work package 1 — Safe cosmetic asset adapter (Gemini) — DONE, live-tested 2026-11-16
 
-- [ ] Create a minimal user-scoped preview or install plan that does not call install.sh, uninstall.sh, any updater, or privileged helper.
-- [ ] Select theme CSS, icons and optional backgrounds explicitly; list every installed/overwritten path in a generated manifest.
-- [ ] Do not overwrite existing user GTK4 configuration without backup; account for libadwaita's stylesheet limitations.
-- [ ] Include dry-run as the default, backup of each overwritten user file, exact restore command, and collision detection.
-- [ ] Keep GTK/theme application separate from GNOME Shell extension enablement.
-- [ ] Include test fixtures for paths with spaces, repeated application (idempotency), pre-existing themes, and partial failure recovery.
-- [ ] No Apple fonts, proprietary wallpapers, or other unclear-redistribution assets in a new packaged release until license verification.
+- [x] Create a minimal user-scoped preview or install plan that does not call install.sh, uninstall.sh, any updater, or privileged helper. `scripts/macw1y-theme.sh` — confirmed by code review, never invokes those.
+- [x] Select theme CSS, icons and optional backgrounds explicitly; list every installed/overwritten path in a generated manifest. GTK theme + icon theme only; backgrounds omitted entirely since none are license-cleared (COMPATIBILITY.md asset spot-check). `manifest.json` records exact paths written and backed up.
+- [x] Do not overwrite existing user GTK4 configuration without backup; account for libadwaita's stylesheet limitations. Backup confirmed live (original `Yaru`/`Yaru`/`Yaru` captured in the manifest and a `dconf dump`). The libadwaita limitation was directly observed on the real desktop, not just anticipated — see "Live test findings" below.
+- [x] Include dry-run as the default, backup of each overwritten user file, exact restore command, and collision detection. Dry-run-by-default and collision detection verified both in sandbox and live (real `$HOME`, before any write). `restore` is implemented and passed its sandbox round-trip test; **not yet exercised against this live apply** — intentionally left applied so the owner can keep evaluating it; restore it with `bash scripts/macw1y-theme.sh restore` whenever ready.
+- [x] Keep GTK/theme application separate from GNOME Shell extension enablement. Confirmed by code review — the script never touches `gnome-extensions`/extension state.
+- [x] Include test fixtures for paths with spaces, repeated application (idempotency), pre-existing themes, and partial failure recovery. `scripts/macw1y-theme-test.sh`, all 6 cases pass.
+- [x] No Apple fonts, proprietary wallpapers, or other unclear-redistribution assets in a new packaged release until license verification. Script never references `fonts/` or `wallpapers/` at all.
 
-**Gate 1:** Manager has reviewed the diff, reproducible asset manifest, and dry-run/restore tests in a disposable account or VM. User authorizes first cosmetic test on target.
+**Gate 1 — PASSED 2026-11-16:** Diff reviewed (Codex, 2 rounds, 9 real bugs found and fixed), reproducible manifest confirmed live, dry-run/restore tested in sandbox. Owner authorized and ran the first live cosmetic test on the real target (`--gtk-variant=dark --icon-variant=mactahoe-dark --execute`); SSH/Tailscale/GNOME Remote Desktop confirmed unaffected, including a live RDP session actively in use during the test.
+
+**Live test findings (real desktop, not sandbox):**
+- Icon-theme changes propagate everywhere, including through `kiwi@kemma`'s dock (its `tahoeApps.js:108` calls `Gtk.IconTheme.get_for_display()`, so dock icons reflect whatever icon theme is active) — confirmed by reading the extension's source, not assumed.
+- `blur-my-shell` has zero references to `icon-theme` in its source — its blur/transparency effects are completely independent of anything WP1 touches.
+- GTK-theme CSS only visibly restyles legacy GTK3 apps (`update-manager`, confirmed GTK3/PyGObject). Modern libadwaita apps (Nautilus/Files, Ptyxis/Terminal, GNOME Settings, Text Editor — all confirmed GTK4+libadwaita via `ldd`) ignore custom GTK themes by design; only their icons change, not their window chrome. This is a real, permanent limitation of the GTK-theme-CSS approach, not a bug — any future macOS-chrome goal for these apps needs a different mechanism (WP2's shell theme, or accepting libadwaita's native look).
 
 ### Work package 2 — Desktop shell appearance, one extension at a time
 
